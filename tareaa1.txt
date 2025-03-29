@@ -1,0 +1,139 @@
+fun main() {
+    println("Hello, world!!!")
+    
+    //Pruebas Tienda
+    val producto1 = Producto("Tallarines", 650.0, 10)
+    val producto2 = Producto("Arroz", 890.0, 10)
+    
+    val tienda = Tienda()
+    tienda.agregarProducto(producto1)
+    tienda.agregarProducto(producto2)
+    tienda.listarProductos()
+    
+    tienda.actualizarStock("Arroz", 5)
+    tienda.listarProductos()
+    
+    tienda.eliminarProducto("Tallarines")
+    tienda.listarProductos()
+        
+    //Pruebas Restaurante
+    val pedido1 = Pedido("Luis", listOf("Lasagna", "Paila Marina", "Tiramiso"), 25000.0)
+    val pedido2 = Pedido("Carla", listOf("Humita", "Carbonada"), 30000.0)
+    val pedido3 = Pedido("Anna", listOf("Bistec a lo pobre", "Pipsha", "Jalea", "Bebida"), 50000.0)
+    
+    val restaurante = Restaurante()
+    restaurante.agregarPedido(pedido1)
+    restaurante.agregarPedido(pedido2)
+    restaurante.agregarPedido(pedido3)
+    println(restaurante.calcularTotal())
+    
+    restaurante.eliminarPedido("Carla")
+    println(restaurante.calcularTotal())
+    println(restaurante.cantidadPlatos())
+    
+}
+
+//Contructor Producto
+class Producto(val nombre: String, var precio: Double, var stock: Int)
+
+//Tienda
+class Tienda{
+    val productos = mutableListOf<Producto>()
+    
+    fun agregarProducto(producto: Producto){
+        productos.add(producto)
+    }
+    
+    fun eliminarProducto(nombre: String){
+        for (i in productos.indices){
+            if (productos[i].nombre == nombre){
+                productos.removeAt(i)
+                return
+            }
+        }
+    }
+    
+    fun actualizarStock(nombre: String, newstock: Int){
+        for (producto in productos){
+            if (producto.nombre == nombre){
+                producto.stock = newstock
+                return
+            }
+        }
+    }
+    
+    fun listarProductos(){
+        println("Productos: ")
+        var aux = 0
+        while (productos.size > aux){
+            val producto = productos[aux]
+            println("${producto.nombre} - ${producto.precio} - ${producto.stock}")
+            aux++
+        }
+    }
+}
+
+//Constructor Pedido
+class Pedido(val nombreCliente: String, val platos: List<String>, var total: Double)
+
+//Restaurante
+class Restaurante{
+    val pedidos = mutableListOf<Pedido>()
+    
+    fun agregarPedido(pedido: Pedido){
+        pedidos.add(pedido)
+    }
+    
+    fun eliminarPedido(nombreCliente: String){
+        for (i in pedidos.indices){
+            if (pedidos[i].nombreCliente == nombreCliente){
+                pedidos.removeAt(i)
+                return
+            }
+        }
+    }
+    
+    fun calcularTotal(): Double{
+        var aux = 0.0
+        for (pedido in pedidos){
+            aux += pedido.total
+        }
+        return aux
+    }
+    
+    fun cantidadPlatos(): List<String>{
+        val clientes = mutableListOf<String>()
+        var aux = 0
+        for (pedido in pedidos){
+            if (pedido.platos.size > aux){
+                aux = pedido.platos.size
+                clientes.clear()
+                clientes.add(pedido.nombreCliente)
+            }
+        }
+        return clientes
+    }
+}
+
+/*PREGUNTAS
+ * 
+ * 1.- ¿Qué es el SDK de Android y por qué es importante en el desarollo de aplicaciones
+ * móviles?
+ * R: El SDK es el kit que posee herramientas, bibliotecas y otros recursos para el desarrollo de las 
+ * aplicaciones moviles. Sin él, el desarrollo en Android Studio se veria tedioso y engorroso. El SDK
+ * al incluir compiladores, documentacion y emuladores, crea que se puedan corregir e implementar elementos
+ * en la interfaz con mayor facilidad. Además de optimizar a la aplicación. 
+ * 
+ * 
+ * 
+ * 2.- Explica la estructura básica de un proyecto en Android Studio. ¿Cuáles son los 
+ * directorio y archivos más importantes?
+ * R: El más importante por lejos es el archivo "app" que contiene todo el codigo y los 
+ * recursos que la aplicación necesita. Después le seguiria "manifest" que posee el archivo
+ * "AndroidManifest.xml" donde se guarda el nombre de la app, el logo y la version de la API. 
+ * El siguiente es aquel que contiene todo el codigo de la app, "kotlin+java", donde esta el 
+ * archivo del cual hacemos uso "MainActivity.kt". Por ultimo, y no menos importante el archivo
+ * "res" que contiene todo los recursos de la app, como "drawable" que son las imagenes, "mipmap"
+ * que corresponde al logo, y por ultimo "values" que guarda todas las cadenas de texto "strings.xml"
+ * , colores "colors.xml", etc. 
+ * */
